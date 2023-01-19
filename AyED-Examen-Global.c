@@ -220,6 +220,7 @@ int main()
     char nombre[30], uea[15];
     float calificacion;
 
+    //Creación del menu de opciones
     while(1)
     {
         printf("\n\n\t\t\t|------MENU------|\n");
@@ -237,9 +238,11 @@ int main()
 
         printf("\n\n - Ingresar opcion: ");
         scanf("%d", &opcion);
-
+        
+        // Creación de las opciones
         switch(opcion)
         {
+            // Insertar alumno
             case 1:
                 printf("Ingrese matricula: ");
                 scanf("%d", &matricula);
@@ -251,13 +254,15 @@ int main()
                 scanf("%f", &calificacion);
                 raiz = agregarNuevo(raiz, matricula, nombre, uea, calificacion);
             break;
-
+            
+            // Eliminar un alumno
             case 2:
                 printf("Ingrese matricula del alumno a borrar: ");
                 scanf("%d", &matricula);
                 raiz = eliminarNodo(raiz, matricula);
             break;
 
+            // Modificación de datos de un alumno
             case 3:
                 printf("Ingrese matricula del alumno a modificar: ");
                 scanf("%d", &matricula);
@@ -269,35 +274,42 @@ int main()
                 scanf("%f", &calificacion);
                 modificar(raiz, matricula, nombre, uea, calificacion);
             break;
-
+            
+            // Buscar por matricula
             case 4:
                 printf("Ingrese matricula del alumno a buscar: ");
                 scanf("%d", &matricula);
                 mostrar(buscar(raiz, matricula));
             break;
 
+            // Buscar por nombre
             case 5:
                 printf("Ingrese nombre del alumno a buscar: ");
                 scanf("%s", nombre);
                 mostrar(buscarNombre(raiz, nombre));
             break;
 
+            // Desplegar datos de un alumno
             case 6:
                 mostrar(raiz);
             break;
 
+            // Inorder
             case 7:
                 inorder(raiz);
             break;
 
+            // Preorder
             case 8:
                 preorder(raiz);
             break;
 
+            // Postorder
             case 9:
                 postorder(raiz);
             break;
 
+            // Salir de la aplicacion.
             case 0:
                 exit(0);
             break;
