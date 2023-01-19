@@ -33,7 +33,6 @@ struct alumno* crearAlumno(int matricula, char nombre[], char uea[], float calif
     return new;
 }
 
-
 // Estructura para agregar un nuevo alumno
 struct alumno* agregarNuevo(struct alumno* alumno,int matricula,char nombre[],char uea[],float calificacion)
 {
