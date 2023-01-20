@@ -33,8 +33,9 @@ struct alumno* crearAlumno(int matricula, char nombre[], char uea[], float calif
     return new;
 }
 
+
 // Estructura para agregar un nuevo alumno
-struct alumno* agregarNuevo(struct alumno* alumno,int matricula,char nombre[],char uea[],float calificacion)
+struct alumno* nuevoAlumno(struct alumno* alumno,int matricula,char nombre[],char uea[],float calificacion)
 {
     if (alumno == NULL)
     {
@@ -43,12 +44,12 @@ struct alumno* agregarNuevo(struct alumno* alumno,int matricula,char nombre[],ch
 
     if (matricula < alumno->matricula)
     {
-        alumno->izq = agregarNuevo(alumno->izq, matricula, nombre, uea, calificacion);
+        alumno->izq = nuevoAlumno(alumno->izq, matricula, nombre, uea, calificacion);
     }
 
     else if (matricula > alumno->matricula)
     {
-        alumno->der = agregarNuevo(alumno->der, matricula, nombre, uea, calificacion);
+        alumno->der = nuevoAlumno(alumno->der, matricula, nombre, uea, calificacion);
     }
 
     return alumno;
@@ -102,47 +103,47 @@ struct alumno* nodoValorMin(struct alumno* alumno)
 }
 
 // Estructura para aliminar dato
-struct alumno* eliminarNodo(struct alumno* raiz, int matricula)
+struct alumno* eliminarNodo(struct alumno* padre, int matricula)
 {
-    if (raiz == NULL)
+    if (padre == NULL)
     {
-        return raiz;
+        return padre;
     }
 
-    if (matricula < raiz->matricula)
+    if (matricula < padre->matricula)
     {
-        raiz->izq = eliminarNodo(raiz->izq, matricula);
+        padre->izq = eliminarNodo(padre->izq, matricula);
     }
 
-    else if (matricula > raiz->matricula)
+    else if (matricula > padre->matricula)
     {
-        raiz->der = eliminarNodo(raiz->der, matricula);
+        padre->der = eliminarNodo(padre->der, matricula);
     }
 
     else
     {
-        if (raiz->izq == NULL)
+        if (padre->izq == NULL)
         {
-            struct alumno* temp = raiz->der;
-            free(raiz);
+            struct alumno* temp = padre->der;
+            free(padre);
         return temp;
         }
 
-        else if (raiz->der == NULL)
+        else if (padre->der == NULL)
         {
-            struct alumno* temp = raiz->izq;
-            free(raiz);
+            struct alumno* temp = padre->izq;
+            free(padre);
             return temp;
         }
 
-        struct alumno* temp = nodoValorMin(raiz->der);
-        raiz->matricula = temp->matricula;
-        strcpy(raiz->nombre, temp->nombre);
-        strcpy(raiz->uea, temp->uea);
-        raiz->calificacion = temp->calificacion;
-        raiz->der = eliminarNodo(raiz->der, temp->matricula);
+        struct alumno* temp = nodoValorMin(padre->der);
+        padre->matricula = temp->matricula;
+        strcpy(padre->nombre, temp->nombre);
+        strcpy(padre->uea, temp->uea);
+        padre->calificacion = temp->calificacion;
+        padre->der = eliminarNodo(padre->der, temp->matricula);
     }
-    return raiz;
+    return padre;
 }
 
 // Modificar nombre del datos de un alumno
@@ -170,42 +171,42 @@ void mostrar(struct alumno* alumno)
 {
     if (alumno!= NULL)
     {
-        printf("Matricula: %d\n", alumno->matricula);
-        printf("Nombre: %s\n", alumno->nombre);
-        printf("UEA: %s\n", alumno->uea);
-        printf("Calificacion: %f\n", alumno->calificacion);
+        printf("\n* Matricula: %d\n", alumno->matricula);
+        printf("* Nombre: %s\n", alumno->nombre);
+        printf("* UEA: %s\n", alumno->uea);
+        printf("* Calificacion: %f\n", alumno->calificacion);
     }
 }
 
-// INORDER
-void inorder(struct alumno* alumno)
+// inOrden1
+void inOrden(struct alumno* alumno)
 {
     if (alumno != NULL)
     {
-        inorder(alumno->izq);
+        inOrden(alumno->izq);
         mostrar(alumno);
-        inorder(alumno->der);
+        inOrden(alumno->der);
     }
 }
 
-// PREORDER
-void preorder(struct alumno* alumno)
+// preOrden
+void preOrden(struct alumno* alumno)
 {
     if (alumno != NULL)
     {
         mostrar(alumno);
-        preorder(alumno->izq);
-        preorder(alumno->der);
+        preOrden(alumno->izq);
+        preOrden(alumno->der);
     }
 }
 
-// POSTORDER
-void postorder(struct alumno* alumno)
+// postOrden
+void postOrden(struct alumno* alumno)
 {
     if (alumno != NULL)
     {
-        postorder(alumno->izq);
-        postorder(alumno->der);
+        postOrden(alumno->izq);
+        postOrden(alumno->der);
         mostrar(alumno);
     }
 }
@@ -214,7 +215,7 @@ void postorder(struct alumno* alumno)
 // Desarrolo del Menu interactivo para el usuario
 int main()
 {
-    struct alumno* raiz = NULL;
+    struct alumno* padre = NULL;
     int opcion, matricula;
     char nombre[30], uea[15];
     float calificacion;
@@ -237,28 +238,28 @@ int main()
 
         printf("\n\n - Ingresar opcion: ");
         scanf("%d", &opcion);
-        
+
         // Creación de las opciones
         switch(opcion)
         {
             // Insertar alumno
             case 1:
-                printf("Ingrese matricula: ");
+                printf("Ingresa la matricula a registrar: ");
                 scanf("%d", &matricula);
-                printf("Ingrese nombre: ");
+                printf("Ingrese el nombre a registrar: ");
                 scanf("%s", nombre);
-                printf("Ingrese UEA: ");
+                printf("Ingrese la UEA a registrar:  ");
                 scanf("%s", uea);
-                printf("Ingrese calificacion: ");
+                printf("Ingrese la calificación obtenida:  ");
                 scanf("%f", &calificacion);
-                raiz = agregarNuevo(raiz, matricula, nombre, uea, calificacion);
+                padre = nuevoAlumno(padre, matricula, nombre, uea, calificacion);
             break;
-            
+
             // Eliminar un alumno
             case 2:
                 printf("Ingrese matricula del alumno a borrar: ");
                 scanf("%d", &matricula);
-                raiz = eliminarNodo(raiz, matricula);
+                padre = eliminarNodo(padre, matricula);
             break;
 
             // Modificación de datos de un alumno
@@ -271,41 +272,41 @@ int main()
                 scanf("%s", uea);
                 printf("Ingrese nueva calificacion: ");
                 scanf("%f", &calificacion);
-                modificar(raiz, matricula, nombre, uea, calificacion);
+                modificar(padre, matricula, nombre, uea, calificacion);
             break;
-            
+
             // Buscar por matricula
             case 4:
                 printf("Ingrese matricula del alumno a buscar: ");
                 scanf("%d", &matricula);
-                mostrar(buscar(raiz, matricula));
+                mostrar(buscar(padre, matricula));
             break;
 
             // Buscar por nombre
             case 5:
                 printf("Ingrese nombre del alumno a buscar: ");
                 scanf("%s", nombre);
-                mostrar(buscarNombre(raiz, nombre));
+                mostrar(buscarNombre(padre, nombre));
             break;
 
             // Desplegar datos de un alumno
             case 6:
-                mostrar(raiz);
+                mostrar(padre);
             break;
 
-            // Inorder
+            // inOrden
             case 7:
-                inorder(raiz);
+                inOrden(padre);
             break;
 
-            // Preorder
+            // preOrden
             case 8:
-                preorder(raiz);
+                preOrden(padre);
             break;
 
-            // Postorder
+            // postOrden
             case 9:
-                postorder(raiz);
+                postOrden(padre);
             break;
 
             // Salir de la aplicacion.
